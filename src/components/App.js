@@ -2,44 +2,40 @@ import React, { useState } from 'react';
 import TaskList from './TaskList';
 import CategoryFilter from './CategoryFilter';
 import NewTaskForm from './NewTaskForm';
-
-const initialTasks = [
-  { text: "Buy groceries", category: "Home" },
-  { text: "Walk the dog", category: "Home" },
-  { text: "Finish project", category: "Work" }
-];
-
-const categories = ["All", "Home", "Work", "School"];
+import { TASKS, CATEGORIES } from '../data';
 
 function App() {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [tasks, setTasks] = useState(TASKS);
+  const [filteredCategory, setFilteredCategory] = useState('All');
 
-  const handleDeleteTask = (taskToDelete) => {
-    setTasks(tasks.filter(task => task !== taskToDelete));
-  };
-
-  const handleAddTask = (newTask) => {
-    setTasks([...tasks, newTask]);
+  const handleDeleteTask = (taskId) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
   };
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    setFilteredCategory(category);
   };
 
-  const filteredTasks = selectedCategory === "All"
+  const handleTaskFormSubmit = (newTask) => {
+    setTasks([...tasks, { ...newTask, id: Date.now() }]);
+  };
+
+  const filteredTasks = filteredCategory === 'All'
     ? tasks
-    : tasks.filter(task => task.category === selectedCategory);
+    : tasks.filter(task => task.category === filteredCategory);
 
   return (
     <div className="App">
-      <CategoryFilter 
-        categories={categories}
-        selectedCategory={selectedCategory}
+      <h1>Task Manager</h1>
+      <CategoryFilter
+        categories={CATEGORIES}
         onCategoryChange={handleCategoryChange}
       />
+      <NewTaskForm
+        categories={CATEGORIES.filter(cat => cat !== 'All')}
+        onTaskFormSubmit={handleTaskFormSubmit}
+      />
       <TaskList tasks={filteredTasks} onDeleteTask={handleDeleteTask} />
-      <NewTaskForm categories={categories} onTaskFormSubmit={handleAddTask} />
     </div>
   );
 }

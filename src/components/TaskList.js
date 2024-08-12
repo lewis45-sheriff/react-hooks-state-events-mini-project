@@ -3,15 +3,11 @@ import Task from './Task';
 
 function TaskList({ tasks, onDeleteTask }) {
   return (
-    <div className="task-list">
-      {tasks.map((task, index) => (
-        <Task 
-          key={index} 
-          task={task} 
-          onDelete={onDeleteTask} 
-        />
+    <ul className="task-list">
+      {tasks.map(task => (
+        <Task key={task.id} task={task} onDelete={onDeleteTask} />
       ))}
-    </div>
+    </ul>
   );
 }
 
