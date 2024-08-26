@@ -1,12 +1,18 @@
-import React from 'react';
+import React from "react";
+import { TASKS } from "../data";
 
-function Task({ task, onDelete }) {
+function Task(props) {
+  const handleDelete = () => {
+    props.onDelete(props.index);
+  };
   return (
-    <li className="task">
-      <span>{task.text}</span>
-      <span className="category">{task.category}</span>
-      <button onClick={() => onDelete(task.id)}>Delete</button>
-    </li>
+    <div className="task">
+      <div className="label">{props.category}</div>
+      <div className="text">{props.text}</div>
+      <button className="delete" onClick={handleDelete}>
+        X
+      </button>
+    </div>
   );
 }
 

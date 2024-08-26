@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import NewTaskForm from "../components/NewTaskForm";
-import App from "../components/App";
 import { CATEGORIES } from "../data";
+import App from "../components/App";
 
 test("calls the onTaskFormSubmit callback prop when the form is submitted", () => {
   const onTaskFormSubmit = jest.fn();
@@ -10,15 +10,15 @@ test("calls the onTaskFormSubmit callback prop when the form is submitted", () =
     <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={onTaskFormSubmit} />
   );
 
-  fireEvent.change(screen.getByLabelText(/Details:/), {
+  fireEvent.change(screen.queryByLabelText(/Details/), {
     target: { value: "Pass the tests" },
   });
 
-  fireEvent.change(screen.getByLabelText(/Category:/), {
+  fireEvent.change(screen.queryByLabelText(/Category/), {
     target: { value: "Code" },
   });
 
-  fireEvent.click(screen.getByText(/Add Task/));
+  fireEvent.submit(screen.queryByText(/Add task/));
 
   expect(onTaskFormSubmit).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -31,19 +31,19 @@ test("calls the onTaskFormSubmit callback prop when the form is submitted", () =
 test("adds a new item to the list when the form is submitted", () => {
   render(<App />);
 
-  const initialTaskCount = screen.getAllByText(/Code/).length;
+  const codeCount = screen.queryAllByText(/Code/).length;
 
-  fireEvent.change(screen.getByLabelText(/Details:/), {
+  fireEvent.change(screen.queryByLabelText(/Details/), {
     target: { value: "Pass the tests" },
   });
 
-  fireEvent.change(screen.getByLabelText(/Category:/), {
+  fireEvent.change(screen.queryByLabelText(/Category/), {
     target: { value: "Code" },
   });
 
-  fireEvent.click(screen.getByText(/Add Task/));
+  fireEvent.submit(screen.queryByText(/Add task/));
 
-  expect(screen.getByText(/Pass the tests/)).toBeInTheDocument();
+  expect(screen.queryByText(/Pass the tests/)).toBeInTheDocument();
 
-  expect(screen.getAllByText(/Code/).length).toBe(initialTaskCount + 1);
+  expect(screen.queryAllByText(/Code/).length).toBe(codeCount + 1);
 });
